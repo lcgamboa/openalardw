@@ -11,7 +11,7 @@
 #include <xc.h>
 #include "pinos.h"
 
-#define _XTAL_FREQ 24000000L
+#define _XTAL_FREQ 48000000L
 
 #define EscrevePino(pino,valor)   pino=valor
 #define LePino(pino)    pino

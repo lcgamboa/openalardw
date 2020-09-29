@@ -114,14 +114,17 @@ int main() {
     delay_ms(10);
     EscrevePino(WRESET, 0);
 
+    WaitWIND(0, TOUT);
+
     if (wifi_mode == NOWIFI) {
-        WaitWIND(0, TOUT);
         SendAT("AT+S.SCFG=sleep_enabled,1", TOUT);
         SendAT("AT+S.SCFG=wifi_powersave,1", TOUT);
         //ret = SendAT("AT+S.SCFG=blink_led,0", TOUT);
+        SendAT("AT&W", TOUT);
+        SendAT("AT+CFUN=1", TOUT);
+        WaitWIND(0, TOUT);
     } else if (wifi_mode == WIFIOK) {
         //configura modulo wifi modo estacao
-        WaitWIND(0, TOUT);
         SendAT("AT+S.SCFG=sleep_enabled,0", TOUT);
         SendAT("AT+S.SCFG=wifi_powersave,0", TOUT);
         SendAT("AT+S.SCFG=blink_led,1", TOUT);
@@ -133,6 +136,8 @@ int main() {
         strcat(atcmd, eeprom_cfg.PASSWD);
         SendAT(atcmd, TOUT);
          */
+        SendAT("AT+S.SCFG=wifi_opr_rate_mask,0x3FFFCF", TOUT);
+        SendAT("AT+S.SCFG=wifi_ht_mode,1", TOUT);
         SendAT("AT+S.SCFG=wifi_priv_mode,2", TOUT);
         SendAT("AT+S.SCFG=wifi_mode,1", TOUT);
         SendAT("AT+S.SCFG=wifi_auth_type,0", TOUT);
@@ -443,6 +448,8 @@ int main() {
                                     SendAT("AT+S.SCFG=sleep_enabled,0", TOUT);
                                     SendAT("AT+S.SCFG=wifi_powersave,0", TOUT);
                                     SendAT("AT+S.SCFG=blink_led,1", TOUT);
+                                    SendAT("AT+S.SCFG=wifi_opr_rate_mask,0x3FFFCF", TOUT);
+                                    SendAT("AT+S.SCFG=wifi_ht_mode,1", TOUT);
                                     SendAT("AT+S.SCFG=wifi_channelnum,12", TOUT);
                                     SendAT("AT+S.SCFG=console1_speed,57600", TOUT);
                                     SendAT("AT+S.SSIDTXT=ECP_MAX", TOUT);

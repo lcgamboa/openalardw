@@ -17,7 +17,7 @@
 #pragma config XINST = OFF      // Extended Instruction Set (Disabled)
 
 // CONFIG1H
-#pragma config CPUDIV = OSC2_PLL2   // CPU System Clock Postscaler (No CPU system clock divide)
+#pragma config CPUDIV = OSC1    // CPU System Clock Postscaler (No CPU system clock divide)
 #pragma config CP0 = OFF        // Code Protect (Program memory is not code-protected)
 
 // CONFIG2L
@@ -128,7 +128,7 @@ void hal_InitTimer0(void) {
 
     T0CONbits.T0CS = 0;
     T0CONbits.PSA = 0;
-    T0CONbits.T0PS = 0x01; // divide por 4
+    T0CONbits.T0PS = 0x02; // divide por 8
     T0CONbits.T08BIT = 0;
     T0CONbits.TMR0ON = 1;
 
@@ -145,7 +145,7 @@ void hal_InitTimer2(void) {
     T2CONbits.T2CKPS = 0b11; //divide por 16
     T2CONbits.T2OUTPS = 0b0100; //divide por 5
     TMR2 = 0;
-    PR2 = 74; //1ms=0.0208333us*16*(74+1)*10
+    PR2 = 149; //1ms=(4/FOSC)*16*(24+1)*5
     T2CONbits.TMR2ON = 1;
     PIE1bits.TMR2IE = 1;
     PIR1bits.TMR2IF = 0;

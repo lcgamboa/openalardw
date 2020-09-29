@@ -16,39 +16,39 @@
 #define S3        PORTAbits.RA3
 //#define NC      PORTAbits.RA4 
 #define S4        PORTAbits.RA5
-#define LED1      PORTAbits.RA6
+#define LED1      LATAbits.LATA6
 #define RFDATA    PORTAbits.RA7
 
 #define AD        PORTBbits.RB0
-#define PGM1      PORTBbits.RB1
-#define LINE_CON  PORTBbits.RB2
-#define SIRENE    PORTBbits.RB3
-#define BUZZER    PORTBbits.RB4
+#define PGM1      LATBbits.LATB1
+#define LINE_CON  LATBbits.LATB2
+#define SIRENE    LATBbits.LATB3
+#define BUZZER    LATBbits.LATB4
 //#define DTMF    PORTBbits.RB5
 //#define PGC     PORTBbits.RB6
 //#define PGD     PORTBbits.RB7
 
-#define CTS       PORTCbits.RC0 //OUT 
+#define CTS       LATCbits.LATC0 //OUT 
 #define RTS       PORTCbits.RC1 //IN
-#define WRESET    PORTCbits.RC2 //OUT
+#define WRESET    LATCbits.LATC2 //OUT
 //#define NC      PORTCbits.RC3
 //#define NC      PORTCbits.RC4
 //#define NC      PORTCbits.RC5
-#define WRX       PORTCbits.RC6 //OUT 
+#define WRX       LATCbits.LATC6 //OUT 
 #define WTX       PORTCbits.RC7 //IN
 
 
-#define LED2      PORTDbits.RD0
-#define LED3      PORTDbits.RD1
-#define LED4      PORTDbits.RD2
-#define LED5      PORTDbits.RD3
-#define LED6      PORTDbits.RD4
-#define LED7      PORTDbits.RD5
-#define LED8      PORTDbits.RD6
-#define LED9      PORTDbits.RD7
+#define LED2      LATDbits.LATD0
+#define LED3      LATDbits.LATD1
+#define LED4      LATDbits.LATD2
+#define LED5      LATDbits.LATD3
+#define LED6      LATDbits.LATD4
+#define LED7      LATDbits.LATD5
+#define LED8      LATDbits.LATD6
+#define LED9      LATDbits.LATD7
 
-#define PGM2      PORTEbits.RE0
-#define PGM3      PORTEbits.RE1
+#define PGM2      LATEbits.LATE0
+#define PGM3      LATEbits.LATE1
 #define BOTAO     PORTEbits.RE2
 
 

@@ -25,7 +25,7 @@
 
 #define USE_SERIAL_RX_INT
 
-void serial_init(void);
+void serial_init(void); //so suporta 57600
 void serial_tx(unsigned char val);
 void serial_tx_str(const char* val);
 unsigned char serial_rx(unsigned int timeout);  /*timeout=0 no time out => return 0xA5 on timeout*/ 

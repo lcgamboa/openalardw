@@ -37,7 +37,7 @@ unsigned int pulseIn(char state)
      delay=TMR0L;
      delay|=TMR0H<<8;
      
-     delay= (delay<<1)/3; //ajuste para 48Mhz
+     delay=(delay<<1)/3; //ajuste 48MHz
      
     return  delay ;
 }

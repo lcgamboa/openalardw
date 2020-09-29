@@ -3,7 +3,7 @@
 #define	CONFIG_H
 
 //definicoes de valores de tempo de funcionamento
-#define TOUT   10000    //timeout das requisicoes seriais em ms, 0 = sem timeout
+#define TOUT   3000    //timeout das requisicoes seriais em ms, 0 = sem timeout
 
 #define TSIRENE 180  //tempo de acionamento da sirente em segundos
 #define TKEEPAL 300  //tempo de sinal de vida, usar sempre maior que o tempo de sirene
