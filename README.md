@@ -285,5 +285,5 @@ Qualquer melhoramento é bem vindo. Quem quiser contribuir fique a vontade para 
 
 ## Vídeos
 
-- Configuração offline: sensores e controles: https://youtu.be/vaOquy2JA0M
-- Gravação e configuração das informações do servidor: https://youtu.be/tyu3gFoUDoI
+- Configuração offline - sensores e controles: https://youtu.be/vaOquy2JA0M
+- Gravação do firmware e configuração das informações do servidor: https://youtu.be/tyu3gFoUDoI
