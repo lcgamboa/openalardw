@@ -283,4 +283,7 @@ A central utiliza um microcontrolador PIC18F46J50 e um módulo wifi SPWF01SA11, 
 
 Qualquer melhoramento é bem vindo. Quem quiser contribuir fique a vontade para ajudar a melhorar o projeto. 
 
+## Vídeos
 
+- Configuração offline: sensores e controles: https://youtu.be/vaOquy2JA0M
+- Gravação e configuração das informações do servidor: https://youtu.be/tyu3gFoUDoI
