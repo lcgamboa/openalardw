@@ -1,3 +1,28 @@
+/* ########################################################################
+
+   Openalardw - Open Firmware para central de alarme Alard Max WiFi
+   https://github.com/lcgamboa/openalardw
+
+   ########################################################################
+
+   Copyright (c) : 2020  Luis Claudio Gambôa Lopes
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   For e-mail suggestions :  lcgamboa@yahoo.com
+   ######################################################################## */
 
 #include "config.h"
 #include "serial.h"
@@ -124,6 +149,10 @@ int main() {
         SendAT("AT+CFUN=1", TOUT);
         WaitWIND(0, TOUT);
     } else if (wifi_mode == WIFIOK) {
+        //desliga mensagens automaticas
+        SendAT("AT+S.SCFG=wind_off_low,0xFEFFFFF8", TOUT); //Wind 0:31 mask
+        SendAT("AT+S.SCFG=wind_off_medium,0xFFFFFFFF", TOUT); //Wind 32:63 mask
+        SendAT("AT+S.SCFG=wind_off_high,0xFFFFFFFF", TOUT); //Wind 64:95 mask
         //configura modulo wifi modo estacao
         SendAT("AT+S.SCFG=sleep_enabled,0", TOUT);
         SendAT("AT+S.SCFG=wifi_powersave,0", TOUT);
@@ -537,6 +566,19 @@ int main() {
                     if (segundos > TKEEPAL) { //envia para o servidor a cada TKEEPAL segundos
                         SendToServer(AL_KEEP_AL, NULL);
                         inicia_tempo(); //limite segundos em TKEEPAL para evitar estouro
+                        //verifica status do servidor
+                        switch (ServerStatus()) {
+                            case REMOTE_CMD_ON:
+                                if (!AL_ON) {
+                                    AlarmeOn();
+                                }
+                                break;
+                            case REMOTE_CMD_OFF:
+                                if (AL_ON) {
+                                    AlarmeOff();
+                                }
+                                break;
+                        }
                     }
                 }
                 break;

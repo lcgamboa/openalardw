@@ -1,10 +1,11 @@
 /* ########################################################################
 
-   PICsim - PIC simulator http://sourceforge.net/projects/picsim/
+   Openalardw - Open Firmware para central de alarme Alard Max WiFi
+   https://github.com/lcgamboa/openalardw
 
    ########################################################################
 
-   Copyright (c) : 2015-2017  Luis Claudio Gambôa Lopes
+   Copyright (c) : 2020  Luis Claudio Gambôa Lopes
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

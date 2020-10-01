@@ -1,4 +1,28 @@
+/* ########################################################################
 
+   Openalardw - Open Firmware para central de alarme Alard Max WiFi
+   https://github.com/lcgamboa/openalardw
+
+   ########################################################################
+
+   Copyright (c) : 2020  Luis Claudio Gamb�a Lopes
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   For e-mail suggestions :  lcgamboa@yahoo.com
+   ######################################################################## */
 
 #include "at_serial.h"
 #include "config.h"
@@ -15,10 +39,30 @@ extern unsigned char AL_SETOR;
 static char buff[1024];
 static char strcmd[1024];
 static char itoabuff[20];
+static char second_buffer[100] = {0};
+
+void AT_free_buffer(void) {
+    if (!serial_avaliable())return;
+
+    do {
+        buff[0] = 0;
+        buff[1] = 0;
+        buff[2] = 0;
+        serial_rx_str_until(buff, 1024, '\n', 10);
+
+        //if codigo de sensor, comecado com # 
+        if ((buff[0] == '%')&&(buff[1] == '2')&&(buff[2] == '3')) {
+            strcat(second_buffer, buff);
+        } else if ((buff[0] == '%')&&(buff[1] == '2')&&(buff[2] == '4')) {
+            strcat(second_buffer, buff);
+        }
+    } while (buff[0]);
+    serial_clear_buffer();
+}
 
 unsigned char SendAT(const char * cmd, int timeout) {
     serial_tx('A');
-    serial_clear_buffer();
+    AT_free_buffer();
     serial_tx_str(cmd + 1);
     serial_tx('\r');
 
@@ -80,7 +124,7 @@ unsigned char ServerStatus(void) {
         strcat(buff, "\r\n");
 
         serial_tx('A');
-        serial_clear_buffer();
+        AT_free_buffer();
         serial_tx_str("T+S.HTTPREQ=");
         serial_tx_str(eeprom_cfg.SERVER);
         serial_tx_str(",");
@@ -122,7 +166,7 @@ unsigned char ServerStatus(void) {
         strcat(strcmd, eeprom_cfg.PORT);
 
         serial_tx('A');
-        serial_clear_buffer();
+        AT_free_buffer();
         serial_tx_str(strcmd);
         serial_tx_str("\r");
         ret = 0;
@@ -151,9 +195,29 @@ unsigned char FindRemote(int timeout) {
     buff[0] = 0;
     buff[1] = 0;
     buff[2] = 0;
-    serial_rx_str_until(buff, 1024, '\n', timeout);
-
-    //if codigo de sensor, come¿ado com # 
+    
+    if(second_buffer[0])
+    {
+        int i=0;
+        int j=0;
+        do
+        {
+          buff[i]=second_buffer[i];
+          i++;
+        }while((buff[i-1] != '\n' )&&(buff[i-1] != 0 ));
+        buff[i]=0;
+        
+        for(j=0;j<strlen(second_buffer);j++)
+        {
+          second_buffer[j]=second_buffer[j+i];
+        }
+    }
+    else
+    {
+      serial_rx_str_until(buff, 1024, '\n', timeout);
+    }
+    
+    //if codigo de sensor, comecado com # 
     if ((buff[0] == '%')&&(buff[1] == '2')&&(buff[2] == '3')) {
         remote = 0;
         remote += ((unsigned long) ((buff[ 3] > '9') ? (buff[ 3] - 'A' + 10) : (buff[ 3] - '0'))) << 28;
@@ -166,13 +230,15 @@ unsigned char FindRemote(int timeout) {
         remote += ((unsigned long) ((buff[10] > '9') ? (buff[10] - 'A' + 10) : (buff[10] - '0')));
         return REMOTE_SENSOR;
     } else if ((buff[0] == '%')&&(buff[1] == '2')&&(buff[2] == '4')) {
-        //comando, come¿ado com $
+        //comando, comecado com $
         if (!strcmp(buff + 3, "DISP\r\n")) {
             AL_DISP = 1;
             AL_SETOR = 9;
         } else if (!strcmp(buff + 3, "CMD\r\n")) {
-
-            return ServerStatus();
+            EscrevePino(LED9, 1);
+            unsigned char ret = ServerStatus();
+            EscrevePino(LED9, 0);
+            return ret;
         }
     }
     return 0;
@@ -205,7 +271,7 @@ static unsigned char ha_sendstatus(const char *status) {
     strcat(buff, "\r\n");
 
     serial_tx('A');
-    serial_clear_buffer();
+    AT_free_buffer();
     serial_tx_str("T+S.HTTPREQ=");
     serial_tx_str(eeprom_cfg.SERVER);
     serial_tx_str(",");
@@ -257,7 +323,7 @@ static unsigned char ha_sendbinarysensor(const char *sensor, int value) {
     strcat(buff, "\r\n");
 
     serial_tx('A');
-    serial_clear_buffer();
+    AT_free_buffer();
     serial_tx_str("T+S.HTTPREQ=");
     serial_tx_str(eeprom_cfg.SERVER);
     serial_tx_str(",");
@@ -307,7 +373,7 @@ static unsigned char ha_sendsensor(const char *sensor, const char *value) {
     strcat(buff, "\r\n");
 
     serial_tx('A');
-    serial_clear_buffer();
+    AT_free_buffer();
     serial_tx_str("T+S.HTTPREQ=");
     serial_tx_str(eeprom_cfg.SERVER);
     serial_tx_str(",");
@@ -338,6 +404,7 @@ unsigned char SendToServer(const unsigned char cmd, const char * code) {
         char sensor[20];
         char status[20];
         char value = -1;
+        char ret = 0;
 
         status[0] = 0;
         sensorb[0] = 0;
@@ -389,17 +456,20 @@ unsigned char SendToServer(const unsigned char cmd, const char * code) {
                 break;
         }
 
-        if (status[0]) {
-            ha_sendstatus(status);
-        }
-
         if (sensor[0]) {
-            ha_sendsensor(sensor, code);
+            ret += ha_sendsensor(sensor, code);
         }
 
         if (sensorb[0]) {
-            return ha_sendbinarysensor(sensorb, value);
+            ret += ha_sendbinarysensor(sensorb, value);
         }
+
+        if (status[0]) {
+            ret += ha_sendstatus(status);
+        }
+
+        return ret;
+
     } else {
 
         strcpy(strcmd, "AT+S.HTTPPOST=");
