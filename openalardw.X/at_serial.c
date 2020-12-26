@@ -5,7 +5,7 @@
 
    ########################################################################
 
-   Copyright (c) : 2020  Luis Claudio Gambôa Lopes
+   Copyright (c) : 2020  Luis Claudio Gamboa Lopes
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -107,21 +107,21 @@ unsigned long remote = 0;
 unsigned char ServerStatus(void) {
     unsigned char ret;
     if (eeprom_cfg.TOKEN[0] != 0xFF) {
-        strcpy(buff, "GET /api/states/alarm_control_panel.");
-        strcat(buff, eeprom_cfg.ID);
-        strcat(buff, " HTTP/1.1\r\n");
-        strcat(buff, "Host: ");
-        strcat(buff, eeprom_cfg.SERVER);
-        strcat(buff, ":");
-        strcat(buff, eeprom_cfg.PORT);
-        strcat(buff, "\r\n");
-        strcat(buff, "User-Agent: SPWF01SA11\r\n");
-        strcat(buff, "Accept: */*\r\n");
-        strcat(buff, "Authorization: Bearer ");
-        strcat(buff, eeprom_cfg.TOKEN);
-        strcat(buff, "\r\n");
-        strcat(buff, "Content-Type: application/json\r\n");
-        strcat(buff, "\r\n");
+        strcpy(strcmd, "GET /api/states/alarm_control_panel.");
+        strcat(strcmd, eeprom_cfg.ID);
+        strcat(strcmd, " HTTP/1.1\r\n");
+        strcat(strcmd, "Host: ");
+        strcat(strcmd, eeprom_cfg.SERVER);
+        strcat(strcmd, ":");
+        strcat(strcmd, eeprom_cfg.PORT);
+        strcat(strcmd, "\r\n");
+        strcat(strcmd, "User-Agent: SPWF01SA11\r\n");
+        strcat(strcmd, "Accept: */*\r\n");
+        strcat(strcmd, "Authorization: Bearer ");
+        strcat(strcmd, eeprom_cfg.TOKEN);
+        strcat(strcmd, "\r\n");
+        strcat(strcmd, "Content-Type: application/json\r\n");
+        strcat(strcmd, "\r\n");
 
         serial_tx('A');
         AT_free_buffer();
@@ -130,9 +130,9 @@ unsigned char ServerStatus(void) {
         serial_tx_str(",");
         serial_tx_str(eeprom_cfg.PORT);
         serial_tx_str(",");
-        serial_tx_str(utoa2(strlen(buff), itoabuff));
+        serial_tx_str(utoa2(strlen(strcmd), itoabuff));
         serial_tx_str("\r");
-        serial_tx_str(buff);
+        serial_tx_str(strcmd);
 
         ret = 0;
         buff[0] = 0;
@@ -151,7 +151,7 @@ unsigned char ServerStatus(void) {
             }
             buff[6] = 0;
 
-        } while (buff[0] && strcmp(buff, "OK\r\n") && strcmp(buff, "ERROR:"));
+        } while (buff[0] && strcmp(buff, "OK\r\n") && strncmp(buff, "ERROR:", 6));
 
         return ret;
     } else {
@@ -184,7 +184,7 @@ unsigned char ServerStatus(void) {
             }
             buff[6] = 0;
 
-        } while (buff[0] && strcmp(buff, "OK\r\n") && strcmp(buff, "ERROR:"));
+        } while (buff[0] && strcmp(buff, "OK\r\n") && strncmp(buff, "ERROR:", 6));
 
         return ret;
     }
@@ -195,28 +195,23 @@ unsigned char FindRemote(int timeout) {
     buff[0] = 0;
     buff[1] = 0;
     buff[2] = 0;
-    
-    if(second_buffer[0])
-    {
-        int i=0;
-        int j=0;
-        do
-        {
-          buff[i]=second_buffer[i];
-          i++;
-        }while((buff[i-1] != '\n' )&&(buff[i-1] != 0 ));
-        buff[i]=0;
-        
-        for(j=0;j<strlen(second_buffer);j++)
-        {
-          second_buffer[j]=second_buffer[j+i];
+
+    if (second_buffer[0]) {
+        int i = 0;
+        int j = 0;
+        do {
+            buff[i] = second_buffer[i];
+            i++;
+        } while ((buff[i - 1] != '\n')&&(buff[i - 1] != 0));
+        buff[i] = 0;
+
+        for (j = 0; j < strlen(second_buffer); j++) {
+            second_buffer[j] = second_buffer[j + i];
         }
+    } else {
+        serial_rx_str_until(buff, 1024, '\n', timeout);
     }
-    else
-    {
-      serial_rx_str_until(buff, 1024, '\n', timeout);
-    }
-    
+
     //if codigo de sensor, comecado com # 
     if ((buff[0] == '%')&&(buff[1] == '2')&&(buff[2] == '3')) {
         remote = 0;
@@ -246,29 +241,33 @@ unsigned char FindRemote(int timeout) {
 
 static unsigned char ha_sendstatus(const char *status) {
 
-
+    unsigned int size;
     strcpy(strcmd, "{\"entity_id\": \"alarm_control_panel.");
     strcat(strcmd, eeprom_cfg.ID);
     strcat(strcmd, "\"}");
+    size = strlen(strcmd);
 
-    strcpy(buff, "POST /api/services/alarm_control_panel/");
-    strcat(buff, status);
-    strcat(buff, " HTTP/1.1\r\n");
-    strcat(buff, "Host: ");
-    strcat(buff, eeprom_cfg.SERVER);
-    strcat(buff, ":");
-    strcat(buff, eeprom_cfg.PORT);
-    strcat(buff, "\r\n");
-    strcat(buff, "User-Agent: SPWF01SA11\r\n");
-    strcat(buff, "Accept: */*\r\n");
-    strcat(buff, "Authorization: Bearer ");
-    strcat(buff, eeprom_cfg.TOKEN);
-    strcat(buff, "\r\n");
-    strcat(buff, "Content-Type: application/json\r\n");
-    strcat(buff, "Content-Length: ");
-    strcat(buff, utoa2(strlen(strcmd), itoabuff));
-    strcat(buff, "\r\n");
-    strcat(buff, "\r\n");
+    strcpy(strcmd, "POST /api/services/alarm_control_panel/");
+    strcat(strcmd, status);
+    strcat(strcmd, " HTTP/1.1\r\n");
+    strcat(strcmd, "Host: ");
+    strcat(strcmd, eeprom_cfg.SERVER);
+    strcat(strcmd, ":");
+    strcat(strcmd, eeprom_cfg.PORT);
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "User-Agent: SPWF01SA11\r\n");
+    strcat(strcmd, "Accept: */*\r\n");
+    strcat(strcmd, "Authorization: Bearer ");
+    strcat(strcmd, eeprom_cfg.TOKEN);
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "Content-Type: application/json\r\n");
+    strcat(strcmd, "Content-Length: ");
+    strcat(strcmd, utoa2(size, itoabuff));
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "{\"entity_id\": \"alarm_control_panel.");
+    strcat(strcmd, eeprom_cfg.ID);
+    strcat(strcmd, "\"}");
 
     serial_tx('A');
     AT_free_buffer();
@@ -277,22 +276,22 @@ static unsigned char ha_sendstatus(const char *status) {
     serial_tx_str(",");
     serial_tx_str(eeprom_cfg.PORT);
     serial_tx_str(",");
-    serial_tx_str(utoa2(strlen(buff) + strlen(strcmd), itoabuff));
+    serial_tx_str(utoa2(strlen(strcmd), itoabuff));
     serial_tx_str("\r");
-    serial_tx_str(buff);
     serial_tx_str(strcmd);
 
     buff[0] = 0;
     do {
         serial_rx_str_until(buff, 1024, '\n', TOUT);
         buff[6] = 0;
-    } while (buff[0] && strcmp(buff, "OK\r\n") && strcmp(buff, "ERROR:"));
+    } while (buff[0] && strcmp(buff, "OK\r\n") && strncmp(buff, "ERROR:", 6));
 
     return strcmp(buff, "OK\r\n");
 }
 
 static unsigned char ha_sendbinarysensor(const char *sensor, int value) {
 
+    int size;
     strcpy(strcmd, "{\"state\": \"");
     if (value) {
         strcat(strcmd, "on");
@@ -302,25 +301,35 @@ static unsigned char ha_sendbinarysensor(const char *sensor, int value) {
     strcat(strcmd, "\", \"attributes\": {\"friendly_name\": \"");
     strcat(strcmd, sensor);
     strcat(strcmd, "\"}}");
+    size = strlen(strcmd);
 
-    strcpy(buff, "POST /api/states/binary_sensor.");
-    strcat(buff, sensor);
-    strcat(buff, " HTTP/1.1\r\n");
-    strcat(buff, "Host: ");
-    strcat(buff, eeprom_cfg.SERVER);
-    strcat(buff, ":");
-    strcat(buff, eeprom_cfg.PORT);
-    strcat(buff, "\r\n");
-    strcat(buff, "User-Agent: SPWF01SA11\r\n");
-    strcat(buff, "Accept: */*\r\n");
-    strcat(buff, "Authorization: Bearer ");
-    strcat(buff, eeprom_cfg.TOKEN);
-    strcat(buff, "\r\n");
-    strcat(buff, "Content-Type: application/json\r\n");
-    strcat(buff, "Content-Length: ");
-    strcat(buff, utoa2(strlen(strcmd), itoabuff));
-    strcat(buff, "\r\n");
-    strcat(buff, "\r\n");
+    strcpy(strcmd, "POST /api/states/binary_sensor.");
+    strcat(strcmd, sensor);
+    strcat(strcmd, " HTTP/1.1\r\n");
+    strcat(strcmd, "Host: ");
+    strcat(strcmd, eeprom_cfg.SERVER);
+    strcat(strcmd, ":");
+    strcat(strcmd, eeprom_cfg.PORT);
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "User-Agent: SPWF01SA11\r\n");
+    strcat(strcmd, "Accept: */*\r\n");
+    strcat(strcmd, "Authorization: Bearer ");
+    strcat(strcmd, eeprom_cfg.TOKEN);
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "Content-Type: application/json\r\n");
+    strcat(strcmd, "Content-Length: ");
+    strcat(strcmd, utoa2(size, itoabuff));
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "{\"state\": \"");
+    if (value) {
+        strcat(strcmd, "on");
+    } else {
+        strcat(strcmd, "off");
+    }
+    strcat(strcmd, "\", \"attributes\": {\"friendly_name\": \"");
+    strcat(strcmd, sensor);
+    strcat(strcmd, "\"}}");
 
     serial_tx('A');
     AT_free_buffer();
@@ -329,16 +338,15 @@ static unsigned char ha_sendbinarysensor(const char *sensor, int value) {
     serial_tx_str(",");
     serial_tx_str(eeprom_cfg.PORT);
     serial_tx_str(",");
-    serial_tx_str(utoa2(strlen(buff) + strlen(strcmd), itoabuff));
+    serial_tx_str(utoa2(strlen(strcmd), itoabuff));
     serial_tx_str("\r");
-    serial_tx_str(buff);
     serial_tx_str(strcmd);
 
     buff[0] = 0;
     do {
         serial_rx_str_until(buff, 1024, '\n', TOUT);
         buff[6] = 0;
-    } while (buff[0] && strcmp(buff, "OK\r\n") && strcmp(buff, "ERROR:"));
+    } while (buff[0] && strcmp(buff, "OK\r\n") && strncmp(buff, "ERROR:", 6));
 
 
     return strcmp(buff, "OK\r\n");
@@ -347,30 +355,37 @@ static unsigned char ha_sendbinarysensor(const char *sensor, int value) {
 
 static unsigned char ha_sendsensor(const char *sensor, const char *value) {
 
+    unsigned int size;
     strcpy(strcmd, "{\"state\": \"");
     strcat(strcmd, value);
     strcat(strcmd, "\", \"attributes\": {\"friendly_name\": \"");
     strcat(strcmd, sensor);
     strcat(strcmd, "\"}}");
+    size = strlen(strcmd);
 
-    strcpy(buff, "POST /api/states/sensor.");
-    strcat(buff, sensor);
-    strcat(buff, " HTTP/1.1\r\n");
-    strcat(buff, "Host: ");
-    strcat(buff, eeprom_cfg.SERVER);
-    strcat(buff, ":");
-    strcat(buff, eeprom_cfg.PORT);
-    strcat(buff, "\r\n");
-    strcat(buff, "User-Agent: SPWF01SA11\r\n");
-    strcat(buff, "Accept: */*\r\n");
-    strcat(buff, "Authorization: Bearer ");
-    strcat(buff, eeprom_cfg.TOKEN);
-    strcat(buff, "\r\n");
-    strcat(buff, "Content-Type: application/json\r\n");
-    strcat(buff, "Content-Length: ");
-    strcat(buff, utoa2(strlen(strcmd), itoabuff));
-    strcat(buff, "\r\n");
-    strcat(buff, "\r\n");
+    strcpy(strcmd, "POST /api/states/sensor.");
+    strcat(strcmd, sensor);
+    strcat(strcmd, " HTTP/1.1\r\n");
+    strcat(strcmd, "Host: ");
+    strcat(strcmd, eeprom_cfg.SERVER);
+    strcat(strcmd, ":");
+    strcat(strcmd, eeprom_cfg.PORT);
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "User-Agent: SPWF01SA11\r\n");
+    strcat(strcmd, "Accept: */*\r\n");
+    strcat(strcmd, "Authorization: Bearer ");
+    strcat(strcmd, eeprom_cfg.TOKEN);
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "Content-Type: application/json\r\n");
+    strcat(strcmd, "Content-Length: ");
+    strcat(strcmd, utoa2(size, itoabuff));
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "\r\n");
+    strcat(strcmd, "{\"state\": \"");
+    strcat(strcmd, value);
+    strcat(strcmd, "\", \"attributes\": {\"friendly_name\": \"");
+    strcat(strcmd, sensor);
+    strcat(strcmd, "\"}}");
 
     serial_tx('A');
     AT_free_buffer();
@@ -379,16 +394,15 @@ static unsigned char ha_sendsensor(const char *sensor, const char *value) {
     serial_tx_str(",");
     serial_tx_str(eeprom_cfg.PORT);
     serial_tx_str(",");
-    serial_tx_str(utoa2(strlen(buff) + strlen(strcmd), itoabuff));
+    serial_tx_str(utoa2(strlen(strcmd), itoabuff));
     serial_tx_str("\r");
-    serial_tx_str(buff);
     serial_tx_str(strcmd);
 
     buff[0] = 0;
     do {
         serial_rx_str_until(buff, 1024, '\n', TOUT);
         buff[6] = 0;
-    } while (buff[0] && strcmp(buff, "OK\r\n") && strcmp(buff, "ERROR:"));
+    } while (buff[0] && strcmp(buff, "OK\r\n") && strncmp(buff, "ERROR:", 6));
 
 
     return strcmp(buff, "OK\r\n");

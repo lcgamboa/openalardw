@@ -94,7 +94,7 @@ MP_PROCESSOR_OPTION=18F46J50
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/main.p1: main.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/main.p1: main.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.p1.d 
 	@${RM} ${OBJECTDIR}/main.p1 
@@ -102,7 +102,7 @@ ${OBJECTDIR}/main.p1: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/main.d ${OBJECTDIR}/main.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/main.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/serial.p1: serial.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/serial.p1: serial.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/serial.p1.d 
 	@${RM} ${OBJECTDIR}/serial.p1 
@@ -110,7 +110,7 @@ ${OBJECTDIR}/serial.p1: serial.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/serial.d ${OBJECTDIR}/serial.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/serial.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/rf_read.p1: rf_read.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/rf_read.p1: rf_read.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/rf_read.p1.d 
 	@${RM} ${OBJECTDIR}/rf_read.p1 
@@ -118,7 +118,7 @@ ${OBJECTDIR}/rf_read.p1: rf_read.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/rf_read.d ${OBJECTDIR}/rf_read.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/rf_read.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/at_serial.p1: at_serial.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/at_serial.p1: at_serial.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/at_serial.p1.d 
 	@${RM} ${OBJECTDIR}/at_serial.p1 
@@ -126,7 +126,7 @@ ${OBJECTDIR}/at_serial.p1: at_serial.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/at_serial.d ${OBJECTDIR}/at_serial.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/at_serial.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/itoa.p1: itoa.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/itoa.p1: itoa.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/itoa.p1.d 
 	@${RM} ${OBJECTDIR}/itoa.p1 
@@ -134,7 +134,7 @@ ${OBJECTDIR}/itoa.p1: itoa.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/itoa.d ${OBJECTDIR}/itoa.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/itoa.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/eeprom_flash.p1: eeprom_flash.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/eeprom_flash.p1: eeprom_flash.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/eeprom_flash.p1.d 
 	@${RM} ${OBJECTDIR}/eeprom_flash.p1 
@@ -142,7 +142,7 @@ ${OBJECTDIR}/eeprom_flash.p1: eeprom_flash.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/eeprom_flash.d ${OBJECTDIR}/eeprom_flash.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/eeprom_flash.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/hal.p1: hal.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/hal.p1: hal.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/hal.p1.d 
 	@${RM} ${OBJECTDIR}/hal.p1 
@@ -151,7 +151,7 @@ ${OBJECTDIR}/hal.p1: hal.c  nbproject/Makefile-${CND_CONF}.mk
 	@${FIXDEPS} ${OBJECTDIR}/hal.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 else
-${OBJECTDIR}/main.p1: main.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/main.p1: main.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.p1.d 
 	@${RM} ${OBJECTDIR}/main.p1 
@@ -159,7 +159,7 @@ ${OBJECTDIR}/main.p1: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/main.d ${OBJECTDIR}/main.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/main.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/serial.p1: serial.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/serial.p1: serial.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/serial.p1.d 
 	@${RM} ${OBJECTDIR}/serial.p1 
@@ -167,7 +167,7 @@ ${OBJECTDIR}/serial.p1: serial.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/serial.d ${OBJECTDIR}/serial.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/serial.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/rf_read.p1: rf_read.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/rf_read.p1: rf_read.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/rf_read.p1.d 
 	@${RM} ${OBJECTDIR}/rf_read.p1 
@@ -175,7 +175,7 @@ ${OBJECTDIR}/rf_read.p1: rf_read.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/rf_read.d ${OBJECTDIR}/rf_read.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/rf_read.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/at_serial.p1: at_serial.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/at_serial.p1: at_serial.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/at_serial.p1.d 
 	@${RM} ${OBJECTDIR}/at_serial.p1 
@@ -183,7 +183,7 @@ ${OBJECTDIR}/at_serial.p1: at_serial.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/at_serial.d ${OBJECTDIR}/at_serial.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/at_serial.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/itoa.p1: itoa.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/itoa.p1: itoa.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/itoa.p1.d 
 	@${RM} ${OBJECTDIR}/itoa.p1 
@@ -191,7 +191,7 @@ ${OBJECTDIR}/itoa.p1: itoa.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/itoa.d ${OBJECTDIR}/itoa.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/itoa.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/eeprom_flash.p1: eeprom_flash.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/eeprom_flash.p1: eeprom_flash.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/eeprom_flash.p1.d 
 	@${RM} ${OBJECTDIR}/eeprom_flash.p1 
@@ -199,7 +199,7 @@ ${OBJECTDIR}/eeprom_flash.p1: eeprom_flash.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/eeprom_flash.d ${OBJECTDIR}/eeprom_flash.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/eeprom_flash.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/hal.p1: hal.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/hal.p1: hal.c  nbproject/Makefile-${CND_CONF}.mk 
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/hal.p1.d 
 	@${RM} ${OBJECTDIR}/hal.p1 

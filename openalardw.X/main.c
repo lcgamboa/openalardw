@@ -5,7 +5,7 @@
 
    ########################################################################
 
-   Copyright (c) : 2020  Luis Claudio Gambôa Lopes
+   Copyright (c) : 2020  Luis Claudio Gamboa Lopes
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,7 +61,8 @@ static unsigned char wifi_mode;
 
 //programa pricipal
 
-int main() {
+int
+main() {
     unsigned char AUX_flash = 0;
     unsigned char setor_grava = 0;
     unsigned char AUX_botao = 0;
@@ -564,7 +565,15 @@ int main() {
                     }
 
                     if (segundos > TKEEPAL) { //envia para o servidor a cada TKEEPAL segundos
-                        SendToServer(AL_KEEP_AL, NULL);
+                        if (SendToServer(AL_KEEP_AL, NULL)) {
+                            //reseta modulo wifi caso erro
+                            EscrevePino(WRESET, 1);
+                            delay_ms(10);
+                            EscrevePino(WRESET, 0);
+                            WaitWIND(0, TOUT);
+                            //reenvia
+                            SendToServer(AL_KEEP_AL, NULL);
+                        }
                         inicia_tempo(); //limite segundos em TKEEPAL para evitar estouro
                         //verifica status do servidor
                         switch (ServerStatus()) {
@@ -592,7 +601,8 @@ int main() {
 
 //verifica se o codigo recebido e valido 
 
-int verifica_codigo(unsigned long sensor, unsigned char testa_ctrl) {
+int
+verifica_codigo(unsigned long sensor, unsigned char testa_ctrl) {
     unsigned char setor;
     unsigned char sm = 0;
 
@@ -672,7 +682,8 @@ int verifica_codigo(unsigned long sensor, unsigned char testa_ctrl) {
 
 //pisca todos os LEDs
 
-void ledflash(int vezes, int delay) {
+void
+ledflash(int vezes, int delay) {
     int i, j;
     unsigned int LED_status = 0;
 
@@ -723,7 +734,8 @@ void ledflash(int vezes, int delay) {
 
 }
 
-unsigned char AlarmeOn(void) {
+unsigned char
+AlarmeOn(void) {
 
     AL_ON = 1;
 
@@ -749,7 +761,8 @@ unsigned char AlarmeOn(void) {
     return 0;
 }
 
-unsigned char AlarmeOff(void) {
+unsigned char
+AlarmeOff(void) {
 
     AL_ON = 0;
 
@@ -786,7 +799,8 @@ unsigned char AlarmeOff(void) {
     return 0;
 }
 
-void ApagaLEDs(void) {
+void
+ApagaLEDs(void) {
 
     EscrevePino(LED1, 0);
     EscrevePino(LED2, 0);
@@ -799,7 +813,8 @@ void ApagaLEDs(void) {
 
 }
 
-void LEDOnOff(unsigned char led, unsigned char state) {
+void
+LEDOnOff(unsigned char led, unsigned char state) {
     switch (led) {
         case 1:
             EscrevePino(LED1, state);
